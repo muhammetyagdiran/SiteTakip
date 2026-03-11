@@ -392,11 +392,8 @@ class _OwnerHomeContentState extends State<OwnerHomeContent> {
                     : Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // 1. Balance Card
                           _buildBalanceCard(context, incomeFormatter),
                           const SizedBox(height: 12),
-                          
-                          // 2. Stats Row
                           IntrinsicHeight(
                             child: Row(
                               children: [
@@ -425,8 +422,6 @@ class _OwnerHomeContentState extends State<OwnerHomeContent> {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          
-                          // 3. Management Tools Header
                           Row(
                             children: [
                               Container(
@@ -449,8 +444,6 @@ class _OwnerHomeContentState extends State<OwnerHomeContent> {
                             ],
                           ),
                           const SizedBox(height: 12),
-                          
-                          // 4. Tools Grid (2x2)
                           Column(
                             children: [
                               Row(
@@ -507,8 +500,6 @@ class _OwnerHomeContentState extends State<OwnerHomeContent> {
                             ],
                           ),
                           const SizedBox(height: 20),
-                          
-                          // 5. Recent Announcements Section
                           if (_recentAnnouncements.isNotEmpty) ...[
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -549,7 +540,7 @@ class _OwnerHomeContentState extends State<OwnerHomeContent> {
                             ),
                             const SizedBox(height: 12),
                             SizedBox(
-                              height: 85, // Changed from 100 to 85
+                              height: 85,
                               child: ListView.separated(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: _recentAnnouncements.length,
@@ -644,9 +635,16 @@ class _OwnerHomeContentState extends State<OwnerHomeContent> {
                                 },
                               ),
                             ),
-      ), // Closing for Column
-    ); // Closing for Scaffold
-  } // Closing for build method
+                          ],
+                        ],
+                      ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildBalanceCard(BuildContext context, NumberFormat formatter) {
     final themeService = Provider.of<ThemeService>(context, listen: false);
