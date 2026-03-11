@@ -383,13 +383,13 @@ class _OwnerHomeContentState extends State<OwnerHomeContent> {
 
           // Body content
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-              child: _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Column(
+            child: ScrollConfiguration(
+              behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 120),
+                child: _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // 1. Balance Card
@@ -644,13 +644,6 @@ class _OwnerHomeContentState extends State<OwnerHomeContent> {
                                 },
                               ),
                             ),
-                          ], // Closing for if (_recentAnnouncements.isNotEmpty)
-                        ], // Closing for Column children
-                      ), // Closing for Column
-                    ), // Closing for Padding
-            ), // Closing for Padding
-          ), // Closing for Expanded
-        ], // Closing for Column children
       ), // Closing for Column
     ); // Closing for Scaffold
   } // Closing for build method
