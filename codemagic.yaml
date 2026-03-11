@@ -1,0 +1,24 @@
+workflows:
+  ios-simulator-workflow:
+    name: iOS Simulator Build
+    max_build_duration: 60
+    instance_type: mac_mini_m1
+    environment:
+      groups:
+        - common_env # Codemagic panelinde tanımladığınız değişken grupları varsa buraya ekleyin
+      flutter: stable
+      xcode: latest
+    scripts:
+      - name: Get Flutter dependencies
+        script: |
+          flutter pub get
+      - name: Build iOS for simulator
+        script: |
+          # Simulator için build alırken kod imzalama (codesigning) gerekmez
+          flutter build ios --simulator --no-codesign
+    artifacts:
+      - build/ios/iphonesimulator/*.app
+    publishing:
+      email:
+        recipients:
+          - user@example.com # Burayı kendi e-postanızla değiştirebilirsiniz
