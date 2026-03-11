@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "192160168635",
+    "project_id": "sitetakip-24351",
+    "storage_bucket": "sitetakip-24351.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:192160168635:android:8dd284ea9c0130f5a5479e",
+        "android_client_info": {
+          "package_name": "com.example.site_takip"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1XRc4niOsgO2IATb3OKb3eABiYjnKE40"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
