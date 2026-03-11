@@ -20,9 +20,18 @@ import 'package:firebase_core/firebase_core.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (!kIsWeb) {
-    await Firebase.initializeApp();
+    try {
+      await Firebase.initializeApp();
+    } catch (e) {
+      debugPrint('Firebase initialize error: $e');
+      // iOS Simulator'da GoogleService-Info.plist eksikse uygulama çökmesini engelle
+    }
   }
-  await SupabaseService.initialize();
+  try {
+    await SupabaseService.initialize();
+  } catch (e) {
+    debugPrint('Supabase initialize error: $e');
+  }
   runApp(
     MultiProvider(
       providers: [
