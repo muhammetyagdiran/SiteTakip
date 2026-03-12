@@ -14,6 +14,10 @@ class NotificationService {
     importance: Importance.max,
   );
 
+  static Future<void> initialize() async {
+    if (kIsWeb) return;
+    final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+
     // 1. Firebase Messaging Permissions (iOS/Android 13+)
     NotificationSettings settings = await _fcm.requestPermission(
       alert: true,

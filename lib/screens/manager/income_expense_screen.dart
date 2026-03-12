@@ -658,7 +658,7 @@ class _IncomeExpenseScreenState extends State<IncomeExpenseScreen> {
                       label: l10n.totalIncome,
                       value: _totalIncome,
                       icon: Icons.trending_up_rounded,
-                      color: Colors.tealAccent,
+                      color: const Color(0xFF10B981), // Premium Emerald Green
                       compact: true,
                       onTap: () => setState(() => _filterType = _filterType == TransactionType.income ? null : TransactionType.income),
                       isActive: _filterType == TransactionType.income,
@@ -684,7 +684,7 @@ class _IncomeExpenseScreenState extends State<IncomeExpenseScreen> {
                       label: 'Top. Gider',
                       value: _totalExpense,
                       icon: Icons.trending_down_rounded,
-                      color: Colors.pinkAccent,
+                      color: const Color(0xFFF43F5E), // Premium Rose Red
                       compact: true,
                       onTap: () => setState(() => _filterType = _filterType == TransactionType.expense ? null : TransactionType.expense),
                       isActive: _filterType == TransactionType.expense,
@@ -753,7 +753,7 @@ class _IncomeExpenseScreenState extends State<IncomeExpenseScreen> {
                         itemBuilder: (context, index) {
                           final t = filteredList[index];
                           final isIncome = t.type == TransactionType.income;
-                          final accentColor = isIncome ? Colors.tealAccent : Colors.pinkAccent;
+                          final accentColor = isIncome ? const Color(0xFF10B981) : const Color(0xFFF43F5E);
                           
                           return Container(
                             margin: const EdgeInsets.only(bottom: 12),
