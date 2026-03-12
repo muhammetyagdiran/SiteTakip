@@ -14,6 +14,7 @@ import 'screens/owner/owner_dashboard.dart';
 import 'screens/manager/manager_dashboard.dart';
 import 'screens/resident/resident_dashboard.dart';
 import 'models/user_model.dart';
+import 'services/notification_service.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 
@@ -32,6 +33,16 @@ void main() async {
   } catch (e) {
     debugPrint('Supabase initialize error: $e');
   }
+
+  // Bildirim servisini başlat
+  if (!kIsWeb) {
+    try {
+      await NotificationService.initialize();
+    } catch (e) {
+      debugPrint('Notification initialize error: $e');
+    }
+  }
+
   runApp(
     MultiProvider(
       providers: [

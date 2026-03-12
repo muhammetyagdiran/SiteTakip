@@ -14,24 +14,45 @@ class NotificationService {
     importance: Importance.max,
   );
 
-  static Future<void> initialize() async {
-    if (kIsWeb) return;
-    final FirebaseMessaging _fcm = FirebaseMessaging.instance;
-
-    // 1. Android 13+ Notification Permission
-    await _fcm.requestPermission(
+    // 1. Firebase Messaging Permissions (iOS/Android 13+)
+    NotificationSettings settings = await _fcm.requestPermission(
       alert: true,
       badge: true,
       sound: true,
+      provisional: false,
     );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted notification permission');
+    } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+      print('User granted provisional notification permission');
+    } else {
+      print('User declined or has not accepted notification permission');
+    }
 
     // 2. Initialize Local Notifications for Foreground
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
-    const InitializationSettings initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
+    
+    const DarwinInitializationSettings initializationSettingsDarwin =
+        DarwinInitializationSettings(
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
+    );
 
-    await _localNotifications.initialize(initializationSettings);
+    const InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsDarwin,
+    );
+
+    await _localNotifications.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (details) {
+        // Handle notification click
+        print('Notification clicked: ${details.payload}');
+      },
+    );
 
     // 3. Create Android Notification Channel
     await _localNotifications
@@ -50,27 +71,44 @@ class NotificationService {
       updateToken(newToken);
     });
 
+    // 3. Set foreground notification presentation options for iOS
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
     // Handle background messages
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     // Handle foreground messages
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
+      
+      if (notification != null && !kIsWeb) {
+        // Android Specific
+        AndroidNotification? android = message.notification?.android;
+        
+        // Build notification details
+        NotificationDetails platformChannelSpecifics = NotificationDetails(
+          android: android != null ? AndroidNotificationDetails(
+            _channel.id,
+            _channel.name,
+            channelDescription: _channel.description,
+            icon: android.smallIcon,
+          ) : null,
+          iOS: const DarwinNotificationDetails(
+            presentAlert: true,
+            presentBadge: true,
+            presentSound: true,
+          ),
+        );
 
-      if (notification != null && android != null && !kIsWeb) {
         _localNotifications.show(
           notification.hashCode,
           notification.title,
           notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              _channel.id,
-              _channel.name,
-              channelDescription: _channel.description,
-              icon: android.smallIcon,
-            ),
-          ),
+          platformChannelSpecifics,
         );
       }
     });
